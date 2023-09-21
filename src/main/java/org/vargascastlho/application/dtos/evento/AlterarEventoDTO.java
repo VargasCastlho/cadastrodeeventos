@@ -28,11 +28,11 @@ public class AlterarEventoDTO {
     @Schema(example = "26/07/2021")
     private String data;
 
-    @Schema(required = true, example = "3")
-    private Integer idRresponsavel;
+    @Schema(required = true, example = "1")
+    private Integer idResponsavel;
 
-    @Schema(required = true, example = "{1, 5, 3}")
+    @Schema(required = true, example = "[1, 2]")
     @NotEmpty
     @NotNull
-    private List<Integer> participantes;
+    private List<Integer> idsParticipantes;
 }
