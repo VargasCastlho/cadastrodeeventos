@@ -21,7 +21,10 @@ public enum MensagemErroValidacaoEnum {
     DESCRICAO_MAXIMO_CARACTERES("O campo descrição deve conter no máximo 1000 caracteres"),
 
     //data
-    DATA_INVALIDA("Data em formato inválido");
+    DATA_INVALIDA("Data em formato inválido"),
+
+    //page size
+    SIZE_OBRIGATORIO("O campo size é obrigatório");
 
     private @Getter String mensagemErro;
 
