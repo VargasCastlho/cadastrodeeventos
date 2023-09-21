@@ -29,6 +29,7 @@ public class Evento {
     private String titulo;
 
     @Max(value = 1000)
+    @Column(length = 1000)
     private String descricao;
 
     @NotNull
