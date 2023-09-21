@@ -1,5 +1,6 @@
 package org.vargascastlho.application.services.interfaces;
 
+import org.vargascastlho.application.dtos.PagedResult;
 import org.vargascastlho.application.dtos.usuario.AdicionarUsuarioDTO;
 import org.vargascastlho.application.dtos.usuario.AlterarNomeUsuarioDTO;
 import org.vargascastlho.application.dtos.usuario.AlterarSenhaUsuarioDTO;
@@ -18,4 +19,6 @@ public interface UsuarioService {
     public UsuarioDTO alterarNome(Integer idUsuario, AlterarNomeUsuarioDTO usuarioDTO) throws ValidacaoException;
 
     public UsuarioDTO alterarSenha(Integer idUsuario, AlterarSenhaUsuarioDTO usuarioDTO) throws ValidacaoException;
+
+    public PagedResult<UsuarioDTO> listarPaginado(Integer page, Integer size) throws ValidacaoException;
 }

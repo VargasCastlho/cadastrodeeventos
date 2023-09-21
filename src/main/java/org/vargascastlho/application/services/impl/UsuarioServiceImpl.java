@@ -1,5 +1,8 @@
 package org.vargascastlho.application.services.impl;
 
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Page;
+import org.vargascastlho.application.dtos.PagedResult;
 import org.vargascastlho.application.dtos.usuario.AdicionarUsuarioDTO;
 import org.vargascastlho.application.dtos.usuario.AlterarNomeUsuarioDTO;
 import org.vargascastlho.application.dtos.usuario.AlterarSenhaUsuarioDTO;
@@ -14,6 +17,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.vargascastlho.domain.enums.MensagemErroValidacaoEnum.*;
 
@@ -54,7 +59,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public UsuarioDTO alterarNome(Integer idUsuario, AlterarNomeUsuarioDTO usuarioDTO) throws ValidacaoException {
         Usuario usuario = buscarUsuario(idUsuario);
-        usuario.alterarNome(usuarioDTO.getNome());
+        String nome = usuarioDTO.getNome().trim();
+        validarNome(nome);
+        usuario.alterarNome(nome);
         repository.persistAndFlush(usuario);
         return mapper.toDTO(usuario);
     }
@@ -63,9 +70,29 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public UsuarioDTO alterarSenha(Integer idUsuario, AlterarSenhaUsuarioDTO usuarioDTO) throws ValidacaoException {
         Usuario usuario = buscarUsuario(idUsuario);
+        validarSenha(usuarioDTO.getSenha());
         usuario.alterarSenha(usuarioDTO.getSenha());
         repository.persistAndFlush(usuario);
         return mapper.toDTO(usuario);
+    }
+
+    @Override
+    @Transactional
+    public PagedResult<UsuarioDTO> listarPaginado(Integer page, Integer size) throws ValidacaoException {
+        if (page == null)
+            page = 0;
+        if (size == null || size == 0)
+            throw new ValidacaoException(SIZE_OBRIGATORIO.getMensagemErro());
+
+        PagedResult<UsuarioDTO> pagedResult = new PagedResult<>();
+
+        PanacheQuery<Usuario> usuarios = repository.findAll();
+        Stream<Usuario> pagina = usuarios.page(Page.of(page, size)).stream();
+
+        pagedResult.results = pagina.map(e -> mapper.toDTO(e)).collect(Collectors.toList());
+        pagedResult.total = usuarios.count();
+
+        return pagedResult;
     }
 
     private Usuario buscarUsuario(Integer idUsuario) throws ValidacaoException {
@@ -81,14 +108,22 @@ public class UsuarioServiceImpl implements UsuarioService {
         String nome = usuarioDTO.getNome();
         String senha = usuarioDTO.getSenha();
 
-        if (nome == null || nome.isEmpty())
-            throw new ValidacaoException(NOME_OBRIGATORIO.getMensagemErro());
+        validarNome(nome);
+        validarSenha(senha);
+    }
+
+    private void validarSenha(String senha) throws ValidacaoException {
         if (senha == null || senha.isEmpty())
             throw new ValidacaoException(SENHA_OBRIGATORIA.getMensagemErro());
         if (senha.length() < 6)
             throw new ValidacaoException(SENHA_MINIMO_CARACTERES.getMensagemErro());
         if (!contemNumero(senha))
             throw new ValidacaoException(SENHA_MINIMO_NUMERO.getMensagemErro());
+    }
+
+    private void validarNome(String nome) throws ValidacaoException {
+        if (nome == null || nome.isEmpty())
+            throw new ValidacaoException(NOME_OBRIGATORIO.getMensagemErro());
     }
 
     private static boolean contemNumero(String str) {

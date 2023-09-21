@@ -1,5 +1,6 @@
 package org.vargascastlho.application.services.interfaces;
 
+import org.vargascastlho.application.dtos.PagedResult;
 import org.vargascastlho.application.dtos.evento.AdicionarEventoDTO;
 import org.vargascastlho.application.dtos.evento.AlterarEventoDTO;
 import org.vargascastlho.application.dtos.evento.EventoDTO;
@@ -15,5 +16,7 @@ public interface EventoService {
     public EventoDTO buscarPorId(Integer idEvento) throws ValidacaoException;
 
     public EventoDTO alterar(Integer idEvento, AlterarEventoDTO eventoDTO) throws ValidacaoException, DataException;
+
+    public PagedResult<EventoDTO> listarPaginado(Integer page, Integer size) throws ValidacaoException;
 
 }
