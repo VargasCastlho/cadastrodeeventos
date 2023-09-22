@@ -12,4 +12,4 @@ Acesse a pasta root do projeto e o execute com o comando
 
 Logo após acesse em seu navegador o seguinte endereço: http://localhost:8080/api/documentacao/
 
-Você verá uma dela igual a esta: ![Documentacao](./docs/tela-documentacao.png)
+Você verá uma tela igual a esta: ![Documentacao](./docs/tela-documentacao.png)
