@@ -2,7 +2,7 @@
 
 Olá, para acessar a documentação da API e testa-la siga estes passos:
 
-Tenha em seu computador o JDK 11 do Java e uma instância do PostgreSQL com um banco de dados chamado "postgres".
+Tenha em seu computador o JDK 11 do Java e uma instância do PostgreSQL 15 com um banco de dados chamado "postgres".
 <br>
 Acesse a pasta root do projeto e execute o projeto com o comando
 
